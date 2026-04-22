@@ -2,11 +2,9 @@ import prisma from '../config/db.js';
 
 export async function createUser(data) {
   try {
-    const user = await prisma.user.create({
-      data,
-      omit: { password: true },
-    });
-    return user;
+    const user = await prisma.user.create({ data });
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
   } catch (err) {
     if (err.code === 'P2002') {
       const error = new Error('Email already in use');
