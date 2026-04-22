@@ -1,16 +1,30 @@
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
+import { readFileSync } from 'fs';
+import { load } from 'js-yaml';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import authRoutes from './routes/authRoutes.js';
 import driverRoutes from './routes/driverRoutes.js';
 import raceRoutes from './routes/raceRoutes.js';
 import predictionRoutes from './routes/predictionRoutes.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const swaggerDocument = load(
+  readFileSync(join(__dirname, '../openapi.yaml'), 'utf8')
+);
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(morgan('tiny'));
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/drivers', driverRoutes);
