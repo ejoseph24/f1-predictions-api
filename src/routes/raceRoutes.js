@@ -8,13 +8,18 @@ import {
 } from '../controllers/raceController.js';
 import { authenticate } from '../middleware/authenticate.js';
 import { authorizeRoles } from '../middleware/authorizeRoles.js';
+import {
+  validateRaceId,
+  validateCreateRace,
+  validateUpdateRace,
+} from '../middleware/validators/raceValidators.js';
 
 const router = express.Router();
 
 router.get('/', getAllRacesHandler);
-router.get('/:id', getRaceByIdHandler);
-router.post('/', authenticate, authorizeRoles('ADMIN'), createRaceHandler);
-router.put('/:id', authenticate, authorizeRoles('ADMIN'), updateRaceHandler);
-router.delete('/:id', authenticate, authorizeRoles('ADMIN'), deleteRaceHandler);
+router.get('/:id', validateRaceId, getRaceByIdHandler);
+router.post('/', authenticate, authorizeRoles('ADMIN'), validateCreateRace, createRaceHandler);
+router.put('/:id', authenticate, authorizeRoles('ADMIN'), validateRaceId, validateUpdateRace, updateRaceHandler);
+router.delete('/:id', authenticate, authorizeRoles('ADMIN'), validateRaceId, deleteRaceHandler);
 
 export default router;
