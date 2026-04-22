@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';
 import driverRoutes from './routes/driverRoutes.js';
+import raceRoutes from './routes/raceRoutes.js';
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(morgan('tiny'));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/drivers', driverRoutes);
+app.use('/api/races', raceRoutes);
 
 app.use((req, res, next) => {
   const error = new Error('Not Found');
